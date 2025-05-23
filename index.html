@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Artistique</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300;400;700&family=Inter:wght@300;400&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body, html {
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+        }
+        
+        .container {
+            position: relative;
+            height: 100vh;
+            width: 100vw;
+            transition: all 0.6s ease-in-out;
+        }
+        
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            transition: opacity 0.8s ease-in-out;
+            z-index: 1;
+        }
+        
+        .background::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            z-index: 2;
+        }
+        
+        .content {
+            position: relative;
+            z-index: 10;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 2rem;
+        }
+        
+        .top-name {
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            font-weight: 300;
+            font-size: clamp(2.5rem, 8vw, 6rem);
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            letter-spacing: 0.1em;
+            margin-top: 1rem;
+            animation: fadeInDown 1s ease-out;
+        }
+        
+        .left-name {
+            position: absolute;
+            left: 2rem;
+            top: 50%;
+            transform: translateY(-50%) rotate(-90deg);
+            transform-origin: center;
+            font-family: 'Playfair Display', serif;
+            font-weight: 300;
+            font-size: clamp(1.5rem, 4vw, 3rem);
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            letter-spacing: 0.15em;
+            white-space: nowrap;
+            animation: fadeInLeft 1s ease-out 0.3s both;
+        }
+        
+        .navigation {
+            position: absolute;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+        
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 0.5rem 0;
+            position: relative;
+            transition: all 0.3s ease;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: white;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            transform: translateX(-5px);
+            color: #f0f0f0;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateY(-50%) rotate(-90deg) translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(-50%) rotate(-90deg) translateX(0);
+            }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Mobile optimizations */
+        @media (max-width: 768px) {
+            .content {
+                padding: 1.5rem;
+            }
+            
+            .left-name {
+                left: 1rem;
+                font-size: clamp(1.2rem, 3vw, 2rem);
+            }
+            
+            .navigation {
+                bottom: 1.5rem;
+                right: 1.5rem;
+                gap: 1rem;
+            }
+            
+            .top-name {
+                margin-top: 0.5rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .left-name {
+                left: 0.5rem;
+            }
+            
+            .navigation {
+                bottom: 1rem;
+                right: 1rem;
+            }
+        }
+        
+        /* Click indicator */
+        .click-hint {
+            position: absolute;
+            bottom: 50%;
+            left: 50%;
+            transform: translate(-50%, 50%);
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            animation: pulse 2s infinite;
+            z-index: 15;
+            pointer-events: none;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 0.3; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" onclick="changeBackground()">
+        <div class="background" id="background"></div>
+        
+        <div class="content">
+            <h1 class="top-name">ALEXANDRA MARTIN</h1>
+            
+            <div class="left-name">ALEXANDRA MARTIN</div>
+            
+            <nav class="navigation">
+                <a href="#about" class="nav-link">À propos</a>
+                <a href="#work" class="nav-link">Œuvre</a>
+                <a href="#contact" class="nav-link">Contact</a>
+            </nav>
+        </div>
+        
+        <div class="click-hint" id="clickHint">Cliquez pour changer l'image</div>
+    </div>
+
+    <script>
+        const backgroundImages = [
+            'https://images.unsplash.com/photo-1541961017774-22349e4a1262?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80',
+            'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80',
+            'https://images.unsplash.com/photo-1518709268805-4e9042af2176?ixlib=rb-4.0.3&auto=format&fit=crop&w=2125&q=80',
+            'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80',
+            'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?ixlib=rb-4.0.3&auto=format&fit=crop&w=2074&q=80',
+            'https://images.unsplash.com/photo-1500964757637-c85e8a162699?ixlib=rb-4.0.3&auto=format&fit=crop&w=2103&q=80',
+            'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80',
+            'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2071&q=80'
+        ];
+        
+        let currentImageIndex = 0;
+        let clickCount = 0;
+        const backgroundElement = document.getElementById('background');
+        const clickHint = document.getElementById('clickHint');
+        
+        // Set initial background
+        backgroundElement.style.backgroundImage = `url(${backgroundImages[currentImageIndex]})`;
+        
+        function changeBackground() {
+            clickCount++;
+            
+            // Hide click hint after first few clicks
+            if (clickCount > 3) {
+                clickHint.style.opacity = '0';
+                setTimeout(() => {
+                    clickHint.style.display = 'none';
+                }, 500);
+            }
+            
+            // Fade out current background
+            backgroundElement.style.opacity = '0';
+            
+            setTimeout(() => {
+                // Change to next image
+                currentImageIndex = (currentImageIndex + 1) % backgroundImages.length;
+                backgroundElement.style.backgroundImage = `url(${backgroundImages[currentImageIndex]})`;
+                
+                // Fade in new background
+                backgroundElement.style.opacity = '1';
+            }, 400);
+        }
+        
+        // Preload images for smooth transitions
+        backgroundImages.forEach(imageUrl => {
+            const img = new Image();
+            img.src = imageUrl;
+        });
+        
+        // Handle navigation clicks
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                // Add some interaction feedback
+                this.style.transform = 'translateX(-8px) scale(1.05)';
+                setTimeout(() => {
+                    this.style.transform = 'translateX(-5px)';
+                }, 200);
+                
+                // Here you could add actual navigation logic
+                console.log(`Navigation to: ${this.textContent}`);
+            });
+        });
+    </script>
+</body>
+</html>
